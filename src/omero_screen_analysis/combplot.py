@@ -3,6 +3,7 @@ Plot a combined histogram and scatter plot from omero screen cell cycle data.
 """
 
 from pathlib import Path
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -11,7 +12,7 @@ from matplotlib import ticker
 from matplotlib.axes import Axes
 from matplotlib.gridspec import GridSpec
 
-from omero_screen_analysis.utils import save_fig
+from omero_screen_analysis.utils import save_fig, selector_val_filter
 
 current_dir = Path(__file__).parent
 style_path = (current_dir / "../../hhlab_style01.mplstyle").resolve()
@@ -212,9 +213,9 @@ def combplot(
     conditions: list[str],
     feature_col: str,
     feature_y_lim: float,
-    selector_val: str | None,
-    x_col: str = "condition",
-    selector_col: str | None = "cell_line",
+    condition_col: str = "condition",
+    selector_col: Optional[str] = "cell_line",
+    selector_val: Optional[str] = None,
     title_str: str | None = None,
     cell_number: int | None = None,
     colors: list[str] = COLORS,
@@ -244,7 +245,8 @@ def combplot(
         Whether to save the figure. Defaults to True.
     """
     col_number = len(conditions)
-    df1 = df[df[selector_col] == selector_val].copy() if selector_col else df
+    df1 = selector_val_filter(df, selector_col, selector_val)
+    assert df1 is not None  # tells type checker df1 is definitely not None
     condition_list = conditions * 3
 
     fig = plt.figure(figsize=(width, height))
@@ -256,7 +258,7 @@ def combplot(
     y_min_col = df[feature_col].quantile(0.01) * 0.8
 
     for i, pos in enumerate(ax_list):
-        data = df1[df1[x_col] == condition_list[i]]
+        data = df1[df1[condition_col] == condition_list[i]]
         if cell_number and len(data) >= cell_number:
             data_red = pd.DataFrame(
                 data.sample(n=cell_number, random_state=42)
@@ -282,7 +284,7 @@ def combplot(
     # Set common x-axis label
     fig.text(0.5, -0.07, "norm. DNA content", ha="center", fontsize=6)
     title = f"{selector_val}_{title_str}" if selector_val else f"{title_str}"
-    fig.suptitle(title, fontsize=8, weight="bold", x=0.1)
+    fig.suptitle(title, fontsize=8, weight="bold", x=0.05)
     if save and path:
         save_fig(
             fig,

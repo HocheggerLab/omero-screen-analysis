@@ -22,3 +22,12 @@ def filtered_data(cell_cycle_data):
     """Pre-filtered dataset with specific conditions"""
     conditions = ["NT", "SCR"]
     return cell_cycle_data[cell_cycle_data.condition.isin(conditions)]
+
+@pytest.fixture
+def signficance_data(cell_cycle_data):
+    """engneer three replicates of data with significant and non-significant results"""
+    # TODO Make two copies of the df and Take data from the three condition categories
+    # TODO Add a significant result to one and a non-significant result to the other
+    # TODO Return a df with the two dfs concatenated
+    
+    return cell_cycle_data
