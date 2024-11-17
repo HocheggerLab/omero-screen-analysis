@@ -13,7 +13,7 @@ from omero_screen_analysis.utils import (
 )
 
 current_dir = Path(__file__).parent
-style_path = (current_dir / "../../hhlab_style01.mplstyle").resolve()
+style_path = (current_dir / "../../Style_03_fig.mplstyle").resolve()
 plt.style.use(style_path)
 prop_cycle = plt.rcParams["axes.prop_cycle"]
 COLORS = prop_cycle.by_key()["color"]
@@ -38,7 +38,7 @@ def norm_count(
     )
 
 
-def count_fig(
+def count_plot(
     df: pd.DataFrame,
     norm_control: str,
     conditions: list,
@@ -70,7 +70,9 @@ def count_fig(
         counts, conditions, condition_col, "normalized_count", ax
     )
     if df1.plate_id.nunique() >= 3:
-        set_significance_marks(ax, counts, conditions, "normalized_count", ax.get_ylim()[1])
+        set_significance_marks(
+            ax, counts, conditions, "normalized_count", ax.get_ylim()[1]
+        )
     if selector_val and title_str:
         title = f"counts {selector_val} {title_str}"
     elif title_str:
@@ -78,7 +80,7 @@ def count_fig(
     else:
         title = "counts"
     file_name = title.replace(" ", "_")
-    ax.set_title(title, fontsize=8, loc='left', pad=10)
+    ax.set_title(title, fontsize=8, loc="left", pad=10)
     if save and path:
         save_fig(
             fig,

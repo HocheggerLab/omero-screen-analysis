@@ -24,7 +24,7 @@ pd.options.mode.chained_assignment = None
 
 # Functions to plot histogram and scatter plots
 def plot_histogram(
-    ax: Axes, i: int, data: pd.DataFrame, colors: list[str]
+    ax: Axes, i: int, data: pd.DataFrame, colors: list[str] = COLORS
 ) -> None:
     """
     Plot a histogram of the integrated DAPI intensity.
@@ -46,7 +46,7 @@ def plot_histogram(
         This function does not return a value.
     """
     sns.histplot(
-        data=data, x="integrated_int_DAPI_norm", ax=ax, color=colors[-1]
+        data=data, x="integrated_int_DAPI_norm", ax=ax, color=COLORS[-1]
     )
     ax.set_xlabel("")
     ax.set_xscale("log", base=2)
@@ -208,7 +208,7 @@ width = 10 / 2.54  # 10 cm
 height = 7 / 2.54  # 4 cm
 
 
-def combplot(
+def comb_plot(
     df: pd.DataFrame,
     conditions: list[str],
     feature_col: str,

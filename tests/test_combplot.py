@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from omero_screen_analysis.combplot import combplot
+from omero_screen_analysis.combplot import comb_plot
 
 
 def test_combplot_with_real_data(filtered_data, tmp_path):
@@ -8,7 +8,7 @@ def test_combplot_with_real_data(filtered_data, tmp_path):
     conditions = ["NT", "SCR"]
     feature_col = "intensity_mean_p21_nucleus"
 
-    combplot(
+    comb_plot(
         df=filtered_data,
         conditions=conditions,
         feature_col=feature_col,

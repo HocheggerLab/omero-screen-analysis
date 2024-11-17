@@ -1,4 +1,6 @@
-from omero_screen_analysis.count_plot import norm_count, count_fig
+import matplotlib.pyplot as plt
+
+from omero_screen_analysis.countplot import count_plot, norm_count
 
 
 def test_norm_count(filtered_data):
@@ -7,7 +9,7 @@ def test_norm_count(filtered_data):
 
 
 def test_count_fig(filtered_data):
-    count_fig(
+    count_plot(
         filtered_data,
         norm_control="NT",
         conditions=["NT", "SCR", "CCNA2", "CDK4"],
@@ -16,3 +18,4 @@ def test_count_fig(filtered_data):
         title_str="test",
         save=False,
     )
+    plt.close("all")

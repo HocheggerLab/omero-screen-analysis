@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from omero_screen_analysis.cellcycle_quant import cc_phase, cellcycle_plots
+from omero_screen_analysis.cellcycleplot import cc_phase, cellcycle_plot
 
 
 def test_cc_phase(filtered_data):
@@ -11,7 +11,7 @@ def test_cc_phase(filtered_data):
 
 def test_cellcycle_plots(filtered_data):
     conditions = ["NT", "SCR"]
-    cellcycle_plots(
+    cellcycle_plot(
         df=filtered_data,
         conditions=conditions,
         selector_col="cell_line",

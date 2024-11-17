@@ -85,10 +85,28 @@ def show_repeat_points(
         x=condition_col,
         y=y_col,
         marker="o",
-        size=2,
-        color="gray",
+        size=3,
+        color="lightgray",
         dodge=True,
         legend=False,
         order=conditions,
         ax=ax,
+        edgecolor="black",
+        linewidth=0.5,
     )
+
+
+def select_datapoints(
+    df: pd.DataFrame, conditions: list[str], condition_col: str, n: int = 30
+) -> pd.DataFrame:
+    """Select 30 random datapoints per category and plate-id"""
+    df_sampled = pd.DataFrame()
+    for condition in conditions:
+        for plate_id in df.plate_id.unique():
+            df_sub = df[
+                (df[condition_col] == condition) & (df.plate_id == plate_id)
+            ]
+            if len(df_sub) > n:
+                df_sub = df_sub.sample(n=n, random_state=1)
+                df_sampled = pd.concat([df_sampled, df_sub])
+    return df_sampled

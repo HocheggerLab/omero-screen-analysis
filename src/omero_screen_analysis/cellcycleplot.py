@@ -41,7 +41,7 @@ def cc_phase(df: pd.DataFrame, condition: str = "condition") -> pd.DataFrame:
     )
 
 
-def cellcycle_plots(
+def cellcycle_plot(
     df: pd.DataFrame,
     conditions: list[str],
     condition_col="condition",
@@ -77,7 +77,9 @@ def cellcycle_plots(
             df_phase, conditions, condition_col, "percent", axes
         )
         if df1.plate_id.nunique() >= 3:
-            set_significance_marks(axes, df_phase, conditions, "percent", axes.get_ylim()[1])
+            set_significance_marks(
+                axes, df_phase, conditions, "percent", axes.get_ylim()[1]
+            )
         axes.set_title(f"{phase}", fontsize=6, pad=0)
         if i in [1, 3]:
             axes.set_ylabel(None)
