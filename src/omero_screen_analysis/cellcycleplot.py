@@ -47,13 +47,16 @@ def cellcycle_plot(
     condition_col="condition",
     selector_col: str | None = "cell_line",
     selector_val: str | None = None,
+    title: str | None = None,
     colors: list[str] = COLORS,
     save: bool = True,
     path: Path | None = None,
 ) -> None:
+    """Plot the cell cycle phases for each condition"""
+    print(f"Plotting cell cycle quantifications for {selector_val}")
     df1 = selector_val_filter(df, selector_col, selector_val)
     assert df1 is not None
-    df1 = cc_phase(df1)
+    df1 = cc_phase(df, condition=condition_col)
     fig, ax = plt.subplots(2, 2, figsize=(height * 0.7, height))
     ax_list = [ax[0, 0], ax[0, 1], ax[1, 0], ax[1, 1]]
     cellcycle = ["G1", "S", "G2/M", "Polyploid"]
@@ -91,14 +94,15 @@ def cellcycle_plot(
             axes.set_xticklabels(conditions, rotation=45, ha="right")
         axes.set_xlabel(None)
         # Get the y-max for positioning significance markers
-    title = f"Cellcycle Analysis {selector_val}"
+    if not title:
+        title = f"Cellcycle Analysis {selector_val}"
     fig.suptitle(title, fontsize=8, weight="bold", x=0.3)
-    # fig.subplots_adjust(hspace=0.3, wspace=0.3)
+    fig_title = title.replace(" ", "_")
     if save and path:
         save_fig(
             fig,
             path,
-            f"cellcycle_analysis_{selector_val}",
+            fig_title,
             tight_layout=False,
             fig_extension="pdf",
         )

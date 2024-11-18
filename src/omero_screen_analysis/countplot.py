@@ -13,7 +13,7 @@ from omero_screen_analysis.utils import (
 )
 
 current_dir = Path(__file__).parent
-style_path = (current_dir / "../../Style_03_fig.mplstyle").resolve()
+style_path = (current_dir / "../../hhlab_style01.mplstyle").resolve()
 plt.style.use(style_path)
 prop_cycle = plt.rcParams["axes.prop_cycle"]
 COLORS = prop_cycle.by_key()["color"]

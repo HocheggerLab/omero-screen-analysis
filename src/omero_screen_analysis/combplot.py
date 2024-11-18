@@ -284,7 +284,7 @@ def comb_plot(
     # Set common x-axis label
     fig.text(0.5, -0.07, "norm. DNA content", ha="center", fontsize=6)
     title = f"{selector_val}_{title_str}" if selector_val else f"{title_str}"
-    fig.suptitle(title, fontsize=8, weight="bold", x=0.05)
+    fig.suptitle(title, fontsize=8, weight="bold", x=0.1)
     if save and path:
         save_fig(
             fig,
