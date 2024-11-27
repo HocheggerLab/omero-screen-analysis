@@ -11,7 +11,8 @@ def test_feature_plot(filtered_data):
         conditions=conditions,
         selector_col="cell_line",
         selector_val="RPE-1_WT",
-        title_str="p21",
+        title="p21",
+        save=False,
         )
     plt.close("all")
 

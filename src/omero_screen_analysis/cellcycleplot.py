@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 import pandas as pd
 import seaborn as sns
 
@@ -44,7 +45,7 @@ def cc_phase(df: pd.DataFrame, condition: str = "condition") -> pd.DataFrame:
 def cellcycle_plot(
     df: pd.DataFrame,
     conditions: list[str],
-    condition_col="condition",
+    condition_col: str="condition",
     selector_col: str | None = "cell_line",
     selector_val: str | None = None,
     title: str | None = None,
@@ -56,7 +57,7 @@ def cellcycle_plot(
     print(f"Plotting cell cycle quantifications for {selector_val}")
     df1 = selector_val_filter(df, selector_col, selector_val)
     assert df1 is not None
-    df1 = cc_phase(df, condition=condition_col)
+    df1 = cc_phase(df1, condition=condition_col)
     fig, ax = plt.subplots(2, 2, figsize=(height * 0.7, height))
     ax_list = [ax[0, 0], ax[0, 1], ax[1, 0], ax[1, 1]]
     cellcycle = ["G1", "S", "G2/M", "Polyploid"]
@@ -75,15 +76,18 @@ def cellcycle_plot(
             order=conditions,
             ax=axes,
         )
-
         show_repeat_points(
-            df_phase, conditions, condition_col, "percent", axes
+            df=df_phase,
+            conditions=conditions,
+            condition_col=condition_col,
+            y_col="percent",
+            ax=axes,
         )
         if df1.plate_id.nunique() >= 3:
             set_significance_marks(
-                axes, df_phase, conditions, "percent", axes.get_ylim()[1]
+                axes, df_phase, conditions, condition_col, "percent", axes.get_ylim()[1]
             )
-        axes.set_title(f"{phase}", fontsize=6, pad=0)
+        axes.set_title(f"{phase}", fontsize=6, y=1.05)
         if i in [1, 3]:
             axes.set_ylabel(None)
         if i in [0, 1]:
@@ -96,7 +100,7 @@ def cellcycle_plot(
         # Get the y-max for positioning significance markers
     if not title:
         title = f"Cellcycle Analysis {selector_val}"
-    fig.suptitle(title, fontsize=8, weight="bold", x=0.3)
+    fig.suptitle(title, fontsize=8, weight="bold", x=0, y=1, ha="left")
     fig_title = title.replace(" ", "_")
     if save and path:
         save_fig(

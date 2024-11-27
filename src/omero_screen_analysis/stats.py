@@ -4,11 +4,11 @@ from matplotlib.axes import Axes
 from scipy import stats
 
 
-def calculate_pvalues(df: pd.DataFrame, conditions: list[str], column: str) -> list[float]:
+def calculate_pvalues(df: pd.DataFrame, conditions: list[str], condition_col: str, column: str) -> list[float]:
     """Calculate p-values for each condition against the first condition."""
-    df2 = df[df.condition.isin(conditions)]
+    df2 = df[df[condition_col].isin(conditions)]
     count_list = [
-        df2[df2.condition == condition][column].tolist()
+        df2[df2[condition_col] == condition][column].tolist()
         for condition in conditions
     ]
     return [
@@ -28,9 +28,9 @@ def get_significance_marker(p: float) -> str:
         case _:
             return "***"
 
-def set_significance_marks(axes: Axes, df: pd.DataFrame, conditions: list[str], y_col: str, y_max: float):
+def set_significance_marks(axes: Axes, df: pd.DataFrame, conditions: list[str], condition_col: str, y_col: str, y_max: float):
     """Set the significance marks on the axes."""
-    pvalues = calculate_pvalues(df, conditions, y_col)
+    pvalues = calculate_pvalues(df, conditions, condition_col, y_col)
     for i, _ in enumerate(conditions[1:], start=1):
         p_value = pvalues[i - 1]  # Adjust index for p-values list
         significance = get_significance_marker(p_value)

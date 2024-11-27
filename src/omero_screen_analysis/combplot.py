@@ -23,7 +23,7 @@ pd.options.mode.chained_assignment = None
 
 
 # Functions to plot histogram and scatter plots
-def plot_histogram(
+def histogram_plot(
     ax: Axes, i: int, data: pd.DataFrame, colors: list[str] = COLORS
 ) -> None:
     """
@@ -59,7 +59,7 @@ def plot_histogram(
     ax.tick_params(axis="both", which="major", labelsize=6)
 
 
-def plot_scatter(
+def scatter_plot(
     ax: Axes,
     i: int,
     data: pd.DataFrame,
@@ -130,7 +130,7 @@ def plot_scatter(
     ax.set_xlabel("")
 
 
-def plot_scatter_col(
+def scatter_plot_feature(
     ax: Axes,
     i: int,
     data: pd.DataFrame,
@@ -216,34 +216,13 @@ def comb_plot(
     condition_col: str = "condition",
     selector_col: Optional[str] = "cell_line",
     selector_val: Optional[str] = None,
-    title_str: str | None = None,
+    title: str | None = None,
     cell_number: int | None = None,
     colors: list[str] = COLORS,
     save: bool = True,
     path: Path | None = None,
 ) -> None:
-    """
-    Plot a combined histogram and scatter plot.
-
-    Parameters
-    ----------
-    df : pd.DataFrame
-        The data to plot.
-    conditions : list[str]
-        The conditions to plot.
-    feature_col : str
-        The feature column to plot.
-    path : Path
-        The path to save the figure.
-    selector_col : str | None, optional
-        The selector column to filter the data. Defaults to None.
-    title_str : str | None, optional
-        The title string. Defaults to None.
-    cell_number : int | None, optional
-        The number of cells to plot. Defaults to None.
-    save : bool, optional
-        Whether to save the figure. Defaults to True.
-    """
+    """ Plot a combined histogram and scatter plot."""
     col_number = len(conditions)
     df1 = selector_val_filter(df, selector_col, selector_val)
     assert df1 is not None  # tells type checker df1 is definitely not None
@@ -268,13 +247,13 @@ def comb_plot(
         ax = fig.add_subplot(gs[pos[0], pos[1]])
 
         if i < len(conditions):
-            plot_histogram(ax, i, data_red, colors)
+            histogram_plot(ax, i, data_red, colors)
             ax.set_title(f"{condition_list[i]}", size=6, weight="regular")
         elif i < 2 * len(conditions):
-            plot_scatter(ax, i, data_red, conditions, colors)
+            scatter_plot(ax, i, data_red, conditions, colors)
             ax.set_ylim(y_min, y_max)
         else:
-            plot_scatter_col(
+            scatter_plot_feature(
                 ax, i, data_red, conditions, feature_col, feature_y_lim, colors
             )
             ax.set_ylim(y_min_col, y_max_col)
@@ -283,13 +262,15 @@ def comb_plot(
 
     # Set common x-axis label
     fig.text(0.5, -0.07, "norm. DNA content", ha="center", fontsize=6)
-    title = f"{selector_val}_{title_str}" if selector_val else f"{title_str}"
-    fig.suptitle(title, fontsize=8, weight="bold", x=0.1)
+    if not title:
+        title = f"combplot{selector_val}"
+    fig.suptitle(title, fontsize=8, weight="bold", x=0, y=1.05, ha="left")
+    figure_title = title.replace(" ", "_")
     if save and path:
         save_fig(
             fig,
             path,
-            title,
+            figure_title,
             tight_layout=False,
             fig_extension="png",
         )

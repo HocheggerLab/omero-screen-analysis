@@ -15,7 +15,7 @@ def test_count_fig(filtered_data):
         conditions=["NT", "SCR", "CCNA2", "CDK4"],
         selector_col="cell_line",
         selector_val="RPE-1_WT",
-        title_str="test",
+        title="test",
         save=False,
     )
     plt.close("all")

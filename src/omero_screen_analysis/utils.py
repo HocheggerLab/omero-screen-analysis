@@ -7,6 +7,12 @@ import seaborn as sns
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
+current_dir = Path(__file__).parent
+style_path = (current_dir / "../../hhlab_style01.mplstyle").resolve()
+plt.style.use(style_path)
+prop_cycle = plt.rcParams["axes.prop_cycle"]
+COLORS = prop_cycle.by_key()["color"]
+
 
 def save_fig(
     fig: Figure,
@@ -73,7 +79,7 @@ def get_repeat_points(
 
 def show_repeat_points(
     df: pd.DataFrame,
-    conditions: list,
+    conditions: list[str],
     condition_col: str,
     y_col: str,
     ax: Axes,
