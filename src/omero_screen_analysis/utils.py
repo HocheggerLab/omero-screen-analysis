@@ -60,9 +60,11 @@ def save_fig(
 
 
 def selector_val_filter(
-    df: pd.DataFrame, selector_col: Optional[str], selector_val: Optional[str]
+    df: pd.DataFrame, selector_col: Optional[str], selector_val: Optional[str], condition_col: Optional[str], conditions: Optional[list[str]]
 ) -> Optional[pd.DataFrame]:
     """Check if selector_val is provided for selector_col and filter df"""
+    if condition_col and conditions:
+        df = df[df[condition_col].isin(conditions)].copy()
     if selector_col and selector_val:
         return df[df[selector_col] == selector_val].copy()
     elif selector_col:

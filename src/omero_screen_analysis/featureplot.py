@@ -39,7 +39,7 @@ def feature_plot(
     path: Optional[Path] = None,
 ) -> None:
     """Plot a feature plot"""
-    df_filtered = selector_val_filter(df, selector_col, selector_val)
+    df_filtered = selector_val_filter(df, selector_col, selector_val, condition_col, conditions)
     assert df_filtered is not None, "No data found"
 
     fig, ax = plt.subplots(figsize=(height, height))
@@ -52,7 +52,7 @@ def feature_plot(
         showfliers=False,
         ax=ax,
     )
-    color_list = [colors[2], colors[3], colors[4]]
+    color_list = [colors[2], colors[3], colors[4], colors[5]]
     plate_ids = df_filtered.plate_id.unique()
     df_sampled = select_datapoints(df_filtered, conditions, condition_col)
     for idx, plate_id in enumerate(plate_ids):
@@ -70,18 +70,23 @@ def feature_plot(
             ax=ax,
         )
     if ymax:
-        ax.set_ylim(ymax)
+        if isinstance(ymax, tuple):
+            ax.set_ylim(ymax[0], ymax[1])  # unpack tuple into min and max
+        else:
+            ax.set_ylim(
+                0, ymax
+            )  # assume 0 as minimum if single value provided
     df_median = (
         df_filtered.groupby(["plate_id", condition_col])[feature]
         .median()
         .reset_index()
     )
+
     show_repeat_points(df_median, conditions, condition_col, feature, ax)
     if len(df.plate_id.unique()) >= 3:
         set_significance_marks(
             ax, df_median, conditions, condition_col, feature, ax.get_ylim()[1]
         )
-
     ax.set_ylabel(feature)
     ax.set_xlabel("")
     ax.set_xticks(range(len(conditions)))

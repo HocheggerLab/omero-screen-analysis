@@ -224,7 +224,7 @@ def comb_plot(
 ) -> None:
     """ Plot a combined histogram and scatter plot."""
     col_number = len(conditions)
-    df1 = selector_val_filter(df, selector_col, selector_val)
+    df1 = selector_val_filter(df, selector_col, selector_val, condition_col, conditions)
     assert df1 is not None  # tells type checker df1 is definitely not None
     condition_list = conditions * 3
 

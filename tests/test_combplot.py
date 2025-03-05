@@ -16,7 +16,7 @@ def test_combplot_with_real_data(filtered_data, tmp_path):
         condition_col="condition",
         selector_col="cell_line",
         selector_val="RPE-1_WT",
-        title_str="test",
+        title="test",
         save=False,
         path=None,
     )
